@@ -14,6 +14,10 @@ const Mentorship = () => {
   const [description, setDescription] = useState('');
   const [scheduledDate, setScheduledDate] = useState('');
 
+  // MEMBER 3 VISUAL TIME SLOTS STATE
+  const [selectedSlot, setSelectedSlot] = useState('');
+  const timeSlots = ['10:00 AM - 10:45 AM', '11:30 AM - 12:15 PM', '02:00 PM - 02:45 PM', '04:30 PM - 05:15 PM'];
+
   // Meet Link input for alumni approval
   const [meetLinks, setMeetLinks] = useState({});
 
@@ -52,8 +56,8 @@ const Mentorship = () => {
 
   const handleBookSession = async (e) => {
     e.preventDefault();
-    if (!mentorId || !scheduledDate || !description.trim()) {
-      alert('Please fill out all booking fields');
+    if (!mentorId || !scheduledDate || !selectedSlot || !description.trim()) {
+      alert('Please fill out all booking fields and select a time slot');
       return;
     }
 
@@ -68,7 +72,7 @@ const Mentorship = () => {
           mentorId,
           sessionType,
           description,
-          scheduledDate
+          scheduledDate: `${scheduledDate} @ ${selectedSlot}`
         })
       });
 
@@ -161,13 +165,33 @@ const Mentorship = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Date & Time</label>
+                    <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Select Date</label>
                     <input
-                      type="datetime-local"
+                      type="date"
                       value={scheduledDate}
                       onChange={(e) => setScheduledDate(e.target.value)}
                       className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500"
                     />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Select Time Slot</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {timeSlots.map(slot => (
+                        <button
+                          key={slot}
+                          type="button"
+                          onClick={() => setSelectedSlot(slot)}
+                          className={`p-2 rounded-xl border text-[10px] font-bold text-center transition ${
+                            selectedSlot === slot 
+                              ? 'bg-indigo-600 text-white border-indigo-650' 
+                              : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                          }`}
+                        >
+                          {slot}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   <div>

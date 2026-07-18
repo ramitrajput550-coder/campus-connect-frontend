@@ -1,18 +1,31 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import LandingPage from './pages/LandingPage';
-import Feed from './pages/Feed';
-import Profile from './pages/Profile';
+import Feed from './pages/student/Feed';
+import Profile from './pages/student/Profile';
 import Directory from './pages/Directory';
-import Connections from './pages/Connections';
+import Connections from './pages/student/Connections';
 import Mentorship from './pages/Mentorship';
 import JobsPortal from './pages/JobsPortal';
-import Events from './pages/Events';
-import Communities from './pages/Communities';
-import Messages from './pages/Messages';
+import Events from './pages/student/Events';
+import Communities from './pages/student/Communities';
+import Messages from './pages/student/Messages';
 import Resources from './pages/Resources';
 import AdminPanel from './pages/AdminPanel';
 import AICenter from './pages/AICenter';
+
+// Member Role Division Pages
+import AlumniDashboard from './pages/AlumniDashboard';
+import AlumniProfile from './pages/AlumniProfile';
+import FacultyDashboard from './pages/FacultyDashboard';
+import Announcements from './pages/Announcements';
+import FacultyEvents from './pages/FacultyEvents';
+import FacultyCommunity from './pages/FacultyCommunity';
+import Placement from './pages/Placement';
+import Analytics from './pages/Analytics';
+import Reports from './pages/Reports';
+import UserManagement from './pages/UserManagement';
+
 import { getAvatarUrl } from './utils/avatar';
 
 import { 
@@ -89,6 +102,18 @@ const DashboardShell = () => {
       case 'resources': return <Resources searchQuery={searchQuery} />;
       case 'admin': return <AdminPanel searchQuery={searchQuery} />;
       case 'ai-center': return <AICenter />;
+      
+      // Member Role Division Page Cases
+      case 'alumni-dashboard': return <AlumniDashboard />;
+      case 'alumni-profile': return <AlumniProfile />;
+      case 'faculty-dashboard': return <FacultyDashboard />;
+      case 'announcements': return <Announcements />;
+      case 'faculty-events': return <FacultyEvents />;
+      case 'faculty-community': return <FacultyCommunity />;
+      case 'placement': return <Placement />;
+      case 'analytics': return <Analytics />;
+      case 'reports': return <Reports />;
+      case 'user-management': return <UserManagement />;
       case 'settings': 
         return (
           <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm text-left max-w-xl mx-auto space-y-4">
@@ -127,9 +152,32 @@ const DashboardShell = () => {
     { id: 'ai-center', label: 'AI Connect Hub', icon: <Brain className="w-4 h-4" /> },
   ];
 
-  // Admin items
+  // Member 2 - Alumni specific nav items
+  if (user && user.role === 'alumni') {
+    navItems.push(
+      { id: 'alumni-dashboard', label: 'Alumni Dashboard', icon: <Briefcase className="w-4 h-4" /> },
+      { id: 'alumni-profile', label: 'Alumni Profile', icon: <User className="w-4 h-4" /> }
+    );
+  }
+
+  // Member 3 - Faculty specific nav items
+  if (user && user.role === 'faculty') {
+    navItems.push(
+      { id: 'faculty-dashboard', label: 'Faculty Dashboard', icon: <Briefcase className="w-4 h-4" /> },
+      { id: 'announcements', label: 'Announcements', icon: <Bell className="w-4 h-4" /> },
+      { id: 'faculty-events', label: 'Faculty Events', icon: <Calendar className="w-4 h-4" /> },
+      { id: 'faculty-community', label: 'Faculty Mod Room', icon: <Users className="w-4 h-4" /> }
+    );
+  }
+
+  // Member 4 - Placement/Admin specific nav items
   if (user && ['admin', 'placement'].includes(user.role)) {
-    navItems.push({ id: 'admin', label: 'Admin Console', icon: <ShieldAlert className="w-4 h-4" /> });
+    navItems.push(
+      { id: 'placement', label: 'Placement Cell', icon: <Briefcase className="w-4 h-4" /> },
+      { id: 'analytics', label: 'Analytics Console', icon: <Brain className="w-4 h-4" /> },
+      { id: 'reports', label: 'Reports Hub', icon: <BookOpen className="w-4 h-4" /> },
+      { id: 'user-management', label: 'User Management', icon: <Settings className="w-4 h-4" /> }
+    );
   }
 
   // Add settings at bottom

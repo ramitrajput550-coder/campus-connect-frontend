@@ -11,6 +11,11 @@ const Messages = ({ searchQuery }) => {
   const [messageText, setMessageText] = useState('');
   const [loading, setLoading] = useState(true);
 
+  // MEMBER 2 REAL-TIME CHAT STATES
+  const [partnerIsTyping, setPartnerIsTyping] = useState(false);
+  const [attachmentUrl, setAttachmentUrl] = useState('');
+  const [activeChatTab, setActiveChatTab] = useState('direct'); // 'direct', 'departments'
+
   // Fetch connections to populate the sidebar list
   const fetchConnections = async () => {
     try {
@@ -65,9 +70,21 @@ const Messages = ({ searchQuery }) => {
     return () => clearInterval(interval);
   }, [activePartner, token]);
 
+  // MEMBER 2: Typing Simulation
+  const handleInputChange = (e) => {
+    setMessageText(e.target.value);
+    if (e.target.value.length > 0 && !partnerIsTyping) {
+      setPartnerIsTyping(true);
+      // Mock partner typing back
+      setTimeout(() => {
+        setPartnerIsTyping(false);
+      }, 3000);
+    }
+  };
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!messageText.trim() || !activePartner) return;
+    if (!messageText.trim() && !attachmentUrl) return;
 
     try {
       const response = await fetch('/api/chat/message', {
@@ -78,7 +95,7 @@ const Messages = ({ searchQuery }) => {
         },
         body: JSON.stringify({
           receiverId: activePartner.id,
-          text: messageText,
+          text: attachmentUrl ? `${messageText} \n📎 Attachment: ${attachmentUrl}` : messageText,
           isGroupChat: false
         })
       });
@@ -87,6 +104,7 @@ const Messages = ({ searchQuery }) => {
         const newMessage = await response.json();
         setMessages([...messages, newMessage]);
         setMessageText('');
+        setAttachmentUrl('');
       }
     } catch (err) {
       console.error(err);
@@ -115,20 +133,35 @@ const Messages = ({ searchQuery }) => {
         <div className="bg-white rounded-3xl border border-slate-100 shadow-sm flex h-[580px] overflow-hidden">
           {/* Chat Sidebar: Connections List */}
           <div className={`w-full md:w-1/3 border-r border-slate-100 flex flex-col ${activePartner ? 'hidden md:flex' : 'flex'}`}>
-            <div className="p-4 bg-slate-50 border-b border-slate-100 font-bold text-slate-800 text-sm">
-              Conversations
+            <div className="p-4 bg-slate-50 border-b border-slate-100 font-bold text-slate-800 text-sm flex justify-between items-center">
+              <span>Conversations</span>
+              <div className="flex gap-1.5">
+                <button 
+                  onClick={() => setActiveChatTab('direct')} 
+                  className={`px-2 py-0.5 rounded text-[10px] font-bold ${activeChatTab === 'direct' ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-650'}`}
+                >
+                  Direct
+                </button>
+                <button 
+                  onClick={() => setActiveChatTab('departments')} 
+                  className={`px-2 py-0.5 rounded text-[10px] font-bold ${activeChatTab === 'departments' ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-650'}`}
+                >
+                  Channels
+                </button>
+              </div>
             </div>
             <div className="flex-1 overflow-y-auto divide-y divide-slate-50">
-              {filteredConnections.map(conn => {
-                const isActive = activePartner?.id === conn.id;
-                return (
-                  <div
-                    key={conn.id}
-                    onClick={() => setActivePartner(conn)}
-                    className={`flex items-center space-x-3 p-4 cursor-pointer transition ${
-                      isActive ? 'bg-indigo-50/50' : 'hover:bg-slate-50'
-                    }`}
-                  >
+              {activeChatTab === 'direct' ? (
+                filteredConnections.map(conn => {
+                  const isActive = activePartner?.id === conn.id;
+                  return (
+                    <div
+                      key={conn.id}
+                      onClick={() => setActivePartner(conn)}
+                      className={`flex items-center space-x-3 p-4 cursor-pointer transition ${
+                        isActive ? 'bg-indigo-50/50' : 'hover:bg-slate-50'
+                      }`}
+                    >
                     <img
                       src={getAvatarUrl(conn.profile.photo, conn.profile.name)}
                       alt={conn.profile.name}
@@ -140,7 +173,28 @@ const Messages = ({ searchQuery }) => {
                     </div>
                   </div>
                 );
-              })}
+              })
+            ) : (
+              [
+                { id: 'cs-channel', profile: { name: '# computer-science' }, role: 'channel' },
+                { id: 'placement-channel', profile: { name: '# placement-cell' }, role: 'channel' },
+                { id: 'alumni-channel', profile: { name: '# alumni-meetups' }, role: 'channel' }
+              ].map(chan => (
+                <div
+                  key={chan.id}
+                  onClick={() => setActivePartner(chan)}
+                  className={`flex items-center space-x-3 p-4 cursor-pointer transition ${
+                    activePartner?.id === chan.id ? 'bg-indigo-50/50' : 'hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-slate-500 font-bold text-lg">#</div>
+                  <div className="text-left leading-tight">
+                    <h4 className="font-bold text-slate-900 text-sm">{chan.profile.name}</h4>
+                    <p className="text-[10px] text-slate-400">Department discussion channel</p>
+                  </div>
+                </div>
+              ))
+            )}
             </div>
           </div>
 
@@ -199,12 +253,36 @@ const Messages = ({ searchQuery }) => {
                 </div>
 
                 {/* Form Input */}
+                <div className="px-4 py-1.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+                  {partnerIsTyping ? (
+                    <span className="italic animate-pulse">{activePartner.profile.name} is typing...</span>
+                  ) : (
+                    <span></span>
+                  )}
+                  {attachmentUrl && (
+                    <span className="text-[10px] bg-slate-200 px-2 py-0.5 rounded text-slate-600 flex items-center gap-1">
+                      📎 Attachment Added
+                      <button type="button" onClick={() => setAttachmentUrl('')} className="font-bold hover:text-red-500">×</button>
+                    </span>
+                  )}
+                </div>
                 <form onSubmit={handleSendMessage} className="p-4 bg-white border-t border-slate-100 flex items-center gap-2">
+                  <button 
+                    type="button"
+                    onClick={() => {
+                      const url = prompt("Enter Image/Attachment URL:");
+                      if (url) setAttachmentUrl(url);
+                    }}
+                    className="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-xl transition border border-slate-200"
+                    title="Add Attachment"
+                  >
+                    📎
+                  </button>
                   <input
                     type="text"
                     placeholder={`Type message to ${activePartner.profile.name}...`}
                     value={messageText}
-                    onChange={(e) => setMessageText(e.target.value)}
+                    onChange={handleInputChange}
                     className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-slate-50 focus:bg-white text-sm"
                   />
                   <button

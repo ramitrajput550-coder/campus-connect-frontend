@@ -14,6 +14,11 @@ const JobsPortal = ({ searchQuery }) => {
   const [resumeUrl, setResumeUrl] = useState('');
   const [coverLetter, setCoverLetter] = useState('');
 
+  // MEMBER 1 FILTERS STATE
+  const [filterJobType, setFilterJobType] = useState('All');
+  const [filterSalary, setFilterSalary] = useState('All');
+  const [filterExperience, setFilterExperience] = useState('All');
+
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -97,22 +102,41 @@ const JobsPortal = ({ searchQuery }) => {
     }
   };
 
+  // MEMBER 1 FILTER LOGIC
   const filteredJobs = jobs.filter(job => {
-    if (!searchQuery) return true;
-    const query = searchQuery.toLowerCase();
-    return (
-      job.jobDetails?.title?.toLowerCase().includes(query) ||
-      job.jobDetails?.company?.toLowerCase().includes(query) ||
-      job.jobDetails?.location?.toLowerCase().includes(query) ||
-      job.content?.toLowerCase().includes(query)
-    );
+    // 1. Search Query Filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      const matchText = (
+        job.jobDetails?.title?.toLowerCase().includes(query) ||
+        job.jobDetails?.company?.toLowerCase().includes(query) ||
+        job.jobDetails?.location?.toLowerCase().includes(query) ||
+        job.content?.toLowerCase().includes(query)
+      );
+      if (!matchText) return false;
+    }
+
+    // 2. Job Type Filter
+    if (filterJobType !== 'All' && job.jobDetails?.jobType !== filterJobType) {
+      return false;
+    }
+
+    // 3. Salary Filter
+    if (filterSalary !== 'All') {
+      const salary = job.jobDetails?.salary || '';
+      if (filterSalary === 'High' && !salary.includes('LPA')) {
+        return false;
+      }
+    }
+
+    return true;
   });
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 text-left">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-black text-slate-900">Careers & Referrals</h2>
-        <p className="text-sm text-slate-500">Apply for positions and track referrals</p>
+        <p className="text-sm text-slate-500">Apply for positions and track referrals (Assigned to Member 1)</p>
       </div>
 
       {/* Tabs */}
@@ -155,7 +179,40 @@ const JobsPortal = ({ searchQuery }) => {
         <div>
           {/* Opportunities Board Tab */}
           {activeTab === 'board' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-6">
+              {/* Member 1: Job Filters UI */}
+              <div className="bg-slate-50 p-4 rounded-2xl flex flex-wrap gap-4 items-center">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Filters:</span>
+                
+                <div className="flex flex-col">
+                  <label className="text-[10px] font-bold text-slate-400">Job Type</label>
+                  <select 
+                    value={filterJobType} 
+                    onChange={(e) => setFilterJobType(e.target.value)}
+                    className="mt-0.5 px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  >
+                    <option value="All">All Types</option>
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Internship">Internship</option>
+                    <option value="Contract">Contract</option>
+                  </select>
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="text-[10px] font-bold text-slate-400">Salary</label>
+                  <select 
+                    value={filterSalary} 
+                    onChange={(e) => setFilterSalary(e.target.value)}
+                    className="mt-0.5 px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  >
+                    <option value="All">Any Salary</option>
+                    <option value="High">LPA Packages Only</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {filteredJobs.length === 0 ? (
                 <div className="col-span-2 bg-white py-16 rounded-3xl border border-slate-100 text-center text-slate-400">
                   {jobs.length === 0 
@@ -219,6 +276,7 @@ const JobsPortal = ({ searchQuery }) => {
                   </div>
                 ))
               )}
+              </div>
             </div>
           )}
 

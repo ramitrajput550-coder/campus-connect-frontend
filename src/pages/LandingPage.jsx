@@ -297,22 +297,7 @@ const LandingPage = () => {
               </button>
             </div>
             
-            {/* Quick Test Credentials Box */}
-            <div className="mt-6 pt-4 border-t border-slate-100 text-left">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
-                Quick Test Credentials:
-              </span>
-              <div className="grid grid-cols-2 gap-1.5 text-[10px] text-slate-500">
-                <div><strong className="text-slate-700">Student:</strong> ananya@campusnet.edu</div>
-                <div>pwd: <code className="bg-slate-100 px-1 rounded">ramit</code></div>
-                <div><strong className="text-slate-700">Alumni:</strong> rohan@campusnet.edu</div>
-                <div>pwd: <code className="bg-slate-100 px-1 rounded">ramit</code></div>
-                <div><strong className="text-slate-700">Admin:</strong> admin@campusnet.edu</div>
-                <div>pwd: <code className="bg-slate-100 px-1 rounded">ramit</code></div>
-                <div><strong className="text-slate-700">Faculty:</strong> faculty@campusnet.edu</div>
-                <div>pwd: <code className="bg-slate-100 px-1 rounded">ramit</code></div>
-              </div>
-            </div>
+
 
           </div>
         </div>
