@@ -234,6 +234,12 @@ const Messages = ({ searchQuery }) => {
                       const senderId = typeof msg.sender === 'object' ? msg.sender.id || msg.sender._id : msg.sender;
                       const isMe = senderId === user.id;
                       
+                      const formatMessageTime = (createdAt) => {
+                        if (!createdAt) return 'Just Now';
+                        const date = new Date(createdAt);
+                        return isNaN(date.getTime()) ? 'Just Now' : date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                      };
+                      
                       return (
                         <div key={index} className={`flex items-start gap-2.5 ${isMe ? 'flex-row-reverse' : ''}`}>
                           <div className={`p-3 rounded-2xl max-w-sm text-sm ${
@@ -241,9 +247,9 @@ const Messages = ({ searchQuery }) => {
                               ? 'bg-indigo-600 text-white rounded-tr-none' 
                               : 'bg-white text-slate-700 rounded-tl-none border border-slate-100 shadow-sm'
                           }`}>
-                            <p className="leading-normal">{msg.text}</p>
+                            <p className="leading-normal">{msg.text || "Hello!"}</p>
                             <span className={`block text-[9px] mt-1 text-right ${isMe ? 'text-indigo-200' : 'text-slate-400'}`}>
-                              {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              {formatMessageTime(msg.createdAt)}
                             </span>
                           </div>
                         </div>
