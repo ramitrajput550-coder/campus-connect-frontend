@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 import { User, Briefcase, Award, Globe, Plus, Trash, BookOpen, MapPin, Edit3, Save, LogOut, CheckCircle, ArrowLeft, Users, UserCheck, UserPlus, Clock } from 'lucide-react';
-import { getAvatarUrl } from '../utils/avatar';
+import { getAvatarUrl } from '../../utils/avatar';
 
 const Profile = ({ targetUserId, onBack }) => {
   const { user: currentUser, token, updateProfile, logout } = useContext(AuthContext);

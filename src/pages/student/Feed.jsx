@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { getAvatarUrl } from '../utils/avatar';
+import { AuthContext } from '../../context/AuthContext';
+import { getAvatarUrl } from '../../utils/avatar';
 import { ThumbsUp, MessageSquare, Send, Image, FileText, Calendar, PlusCircle, CheckCircle, Tag, Megaphone, Briefcase, Trash, Network, GraduationCap, Users, Rss, Edit3 } from 'lucide-react';
 
 const Feed = ({ onNavigate, onViewProfile, searchQuery }) => {
