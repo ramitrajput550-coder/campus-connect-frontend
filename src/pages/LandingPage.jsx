@@ -156,8 +156,6 @@ const LandingPage = () => {
                     >
                       <option value="student">Student</option>
                       <option value="alumni">Alumni</option>
-                      <option value="faculty">Faculty</option>
-                      <option value="placement">Placement Officer</option>
                     </select>
                   </div>
 
