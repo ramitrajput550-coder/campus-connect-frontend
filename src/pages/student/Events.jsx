@@ -113,7 +113,7 @@ const Events = ({ searchQuery }) => {
           <p className="text-sm text-slate-500">Participate in webinars, workshops, and placement drives</p>
         </div>
 
-        {user.role === 'admin' && (
+        {['admin', 'faculty', 'placement'].includes(user.role) && (
           <button
             onClick={() => setShowCreateModal(true)}
             className="flex items-center justify-center gap-1.5 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-650 text-white rounded-xl text-xs font-bold shadow-md shadow-indigo-100 hover:opacity-95 transition"
