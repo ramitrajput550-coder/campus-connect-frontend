@@ -610,7 +610,7 @@ const Feed = ({ onNavigate, onViewProfile, searchQuery }) => {
               <p className="text-slate-700 whitespace-pre-line text-left leading-relaxed">{post.content}</p>
 
               {/* Job / Referral Details Block */}
-              {post.jobDetails && (
+              {(post.postType === 'job' || post.postType === 'referral') && post.jobDetails && (
                 <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-left space-y-3">
                   <div className="flex justify-between items-start">
                     <div>
@@ -625,7 +625,7 @@ const Feed = ({ onNavigate, onViewProfile, searchQuery }) => {
                   </div>
                   <div className="flex gap-2">
                     <span className="bg-slate-200 text-slate-700 text-xs font-semibold px-2 py-0.5 rounded">
-                      {post.jobDetails.jobType}
+                       {post.jobDetails.jobType}
                     </span>
                   </div>
                   {post.jobDetails.externalLink && (
