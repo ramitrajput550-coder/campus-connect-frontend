@@ -646,6 +646,7 @@ const Feed = ({ onNavigate, onViewProfile, searchQuery }) => {
                 <img
                   src={post.mediaUrl}
                   alt="Post attachment"
+                  onError={(e) => { e.target.style.display = 'none'; }}
                   className="rounded-xl w-full max-h-96 object-cover border border-slate-100"
                 />
               )}
