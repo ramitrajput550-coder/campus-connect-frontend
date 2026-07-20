@@ -651,7 +651,7 @@ const Feed = ({ onNavigate, onViewProfile, searchQuery }) => {
               )}
 
               {/* Reactions count summary */}
-              {post.likes.length > 0 && (
+              {post.likes && post.likes.length > 0 && (
                 <div className="flex items-center space-x-1.5 pb-2 border-b border-slate-50 text-[10px] text-slate-500">
                   <div className="flex -space-x-1">
                     <span className="w-4.5 h-4.5 bg-indigo-600 text-white rounded-full flex items-center justify-center ring-2 ring-white text-[9px] font-bold">👍</span>
@@ -667,23 +667,23 @@ const Feed = ({ onNavigate, onViewProfile, searchQuery }) => {
                 <button
                   onClick={() => handleLike(post._id)}
                   className={`flex items-center space-x-2 text-sm font-semibold transition ${
-                    post.likes.includes(user.id)
+                    post.likes && user?.id && post.likes.includes(user.id)
                       ? 'text-indigo-600'
                       : 'text-slate-500 hover:text-slate-700'
                   }`}
                 >
-                  <ThumbsUp className={`w-4 h-4 ${post.likes.includes(user.id) ? 'fill-indigo-600' : ''}`} />
-                  <span>{post.likes.length} Likes</span>
+                  <ThumbsUp className={`w-4 h-4 ${post.likes && user?.id && post.likes.includes(user.id) ? 'fill-indigo-600' : ''}`} />
+                  <span>{(post.likes || []).length} Likes</span>
                 </button>
 
                 <div className="flex items-center space-x-2 text-sm font-semibold text-slate-500">
                   <MessageSquare className="w-4 h-4" />
-                  <span>{post.comments.length} Comments</span>
+                  <span>{(post.comments || []).length} Comments</span>
                 </div>
               </div>
 
               {/* Comments Section */}
-              {post.comments.length > 0 && (
+              {post.comments && post.comments.length > 0 && (
                 <div className="space-y-3 pt-3 border-t border-slate-50 bg-slate-50/50 p-4 rounded-xl">
                   {post.comments.map((comment, index) => (
                     <div key={index} className="flex items-start space-x-3 text-left">
