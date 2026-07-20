@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { UserCheck, UserPlus, Check, X, Clock, HelpCircle } from 'lucide-react';
+import { getAvatarUrl } from '../../utils/avatar';
 
 const Connections = ({ searchQuery }) => {
   const { token } = useContext(AuthContext);
@@ -109,8 +110,9 @@ const Connections = ({ searchQuery }) => {
                     <div key={req.id} className="flex items-center justify-between p-3.5 bg-slate-50 rounded-2xl border border-slate-150">
                       <div className="flex items-center space-x-3">
                         <img
-                          src={req.profile.photo || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=80'}
+                          src={getAvatarUrl(req.profile.photo, req.profile.name)}
                           alt={req.profile.name}
+                          onError={(e) => { e.target.src = getAvatarUrl('', req.profile.name); }}
                           className="w-10 h-10 rounded-full object-cover"
                         />
                         <div>
@@ -149,8 +151,9 @@ const Connections = ({ searchQuery }) => {
                   {filteredConnections.map(conn => (
                     <div key={conn.id} className="flex items-center space-x-3.5 p-4 bg-slate-50 rounded-2xl border border-slate-100">
                       <img
-                        src={conn.profile.photo || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100'}
+                        src={getAvatarUrl(conn.profile.photo, conn.profile.name)}
                         alt={conn.profile.name}
+                        onError={(e) => { e.target.src = getAvatarUrl('', conn.profile.name); }}
                         className="w-12 h-12 rounded-full object-cover ring-2 ring-indigo-50"
                       />
                       <div className="space-y-0.5 text-left">

@@ -232,6 +232,7 @@ const Directory = ({ onNavigate, onViewProfile, searchQuery }) => {
                 <img
                   src={getAvatarUrl(person.profile.photo, person.profile.name)}
                   alt={person.profile.name}
+                  onError={(e) => { e.target.src = getAvatarUrl('', person.profile.name); }}
                   className="w-16 h-16 rounded-2xl object-cover ring-2 ring-indigo-50 group-hover:ring-indigo-300 transition shrink-0"
                 />
                 <div className="space-y-1 text-left">
