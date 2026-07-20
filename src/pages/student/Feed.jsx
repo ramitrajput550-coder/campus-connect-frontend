@@ -341,6 +341,7 @@ const Feed = ({ onNavigate, onViewProfile, searchQuery }) => {
               <img
                 src={getAvatarUrl(user?.profile?.photo, user?.profile?.name)}
                 alt={user?.profile?.name}
+                onError={(e) => { e.target.src = getAvatarUrl('', user?.profile?.name); }}
                 className="w-16 h-16 rounded-full border-4 border-white object-cover shadow-sm bg-white shrink-0"
               />
             </div>
@@ -467,6 +468,7 @@ const Feed = ({ onNavigate, onViewProfile, searchQuery }) => {
           <img
             src={getAvatarUrl(user?.profile?.photo, user?.profile?.name)}
             alt={user?.profile?.name}
+            onError={(e) => { e.target.src = getAvatarUrl('', user?.profile?.name); }}
             className="w-10 h-10 rounded-full object-cover shrink-0"
           />
           <button
@@ -690,8 +692,9 @@ const Feed = ({ onNavigate, onViewProfile, searchQuery }) => {
                   {post.comments.map((comment, index) => (
                     <div key={index} className="flex items-start space-x-3 text-left">
                       <img
-                        src={comment.userPhoto || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=50'}
+                        src={getAvatarUrl(comment.userPhoto, comment.userName)}
                         alt={comment.userName}
+                        onError={(e) => { e.target.src = getAvatarUrl('', comment.userName); }}
                         className="w-8 h-8 rounded-full object-cover"
                       />
                       <div className="flex-1 bg-white p-2.5 rounded-xl border border-slate-100">
@@ -954,6 +957,7 @@ const Feed = ({ onNavigate, onViewProfile, searchQuery }) => {
                     <img
                       src={getAvatarUrl(person.profile?.photo, person.profile?.name)}
                       alt={person.profile?.name}
+                      onError={(e) => { e.target.src = getAvatarUrl('', person.profile?.name); }}
                       className="w-9 h-9 rounded-full object-cover shrink-0"
                     />
                     <div className="overflow-hidden leading-tight">

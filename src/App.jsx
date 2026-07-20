@@ -231,6 +231,7 @@ const DashboardShell = () => {
             <img
               src={getAvatarUrl(user.profile?.photo, user.profile?.name)}
               alt={user.profile?.name}
+              onError={(e) => { e.target.src = getAvatarUrl('', user.profile?.name); }}
               className="w-10 h-10 rounded-xl object-cover ring-2 ring-slate-850"
             />
             <div className="overflow-hidden leading-tight flex-1">
