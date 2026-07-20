@@ -213,6 +213,7 @@ const Messages = ({ searchQuery }) => {
                   <img
                     src={getAvatarUrl(activePartner.profile.photo, activePartner.profile.name)}
                     alt={activePartner.profile.name}
+                    onError={(e) => { e.target.src = getAvatarUrl('', activePartner.profile.name); }}
                     className="w-10 h-10 rounded-full object-cover shrink-0"
                   />
                   <div>

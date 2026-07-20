@@ -300,6 +300,7 @@ const Profile = ({ targetUserId, onBack }) => {
               <img
                 src={getAvatarUrl(user.profile.photo || photo, user.profile.name)}
                 alt={user.profile.name}
+                onError={(e) => { e.target.src = getAvatarUrl('', user.profile.name); }}
                 className="w-full h-full object-cover"
               />
               {!targetUserId && (

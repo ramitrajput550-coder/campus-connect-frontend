@@ -324,8 +324,9 @@ const DashboardShell = () => {
               className="flex items-center space-x-2.5 border border-slate-100 p-1.5 pr-3 rounded-xl hover:bg-slate-50 transition"
             >
               <img
-                src={user.profile?.photo || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=80'}
+                src={getAvatarUrl(user.profile?.photo, user.profile?.name)}
                 alt={user.profile?.name}
+                onError={(e) => { e.target.src = getAvatarUrl('', user.profile?.name); }}
                 className="w-7 h-7 rounded-lg object-cover"
               />
               <span className="text-xs font-bold text-slate-700">{user.profile?.name}</span>

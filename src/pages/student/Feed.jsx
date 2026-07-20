@@ -544,6 +544,7 @@ const Feed = ({ onNavigate, onViewProfile, searchQuery }) => {
                   <img
                     src={getAvatarUrl(post.userPhoto, post.userName)}
                     alt={post.userName}
+                    onError={(e) => { e.target.src = getAvatarUrl('', post.userName); }}
                     className="w-12 h-12 rounded-full object-cover ring-2 ring-indigo-50 group-hover:ring-indigo-300 transition"
                   />
                   <div>
